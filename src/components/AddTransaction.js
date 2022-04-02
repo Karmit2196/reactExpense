@@ -7,7 +7,9 @@ export const AddTransaction = () => {
 
   const { addTransaction } = useContext(GlobalContext);
 
-  const onSubmit = e => {
+
+
+  const income = e => {
     e.preventDefault();
 
     const newTransaction = {
@@ -17,24 +19,40 @@ export const AddTransaction = () => {
     }
 
     addTransaction(newTransaction);
+    setAmount(0);
+    setText('');
+  }
+
+  const expense = e => {
+    e.preventDefault();
+
+    const newTransaction = {
+      id: Math.floor(Math.random() * 100000000),
+      text,
+      amount: -amount
+    }
+
+    addTransaction(newTransaction);
+    setAmount(0);
+    setText('');
   }
 
   return (
     <>
       <h3>Add new transaction</h3>
-      <form onSubmit={onSubmit}>
+      <form >
         <div className="form-control">
           <label htmlFor="text">Text</label>
-          <input type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="Enter text..." />
+          <input type="text" value={text} onChange={(e) => 
+            setText(e.target.value)
+            } placeholder="Enter text..." />
         </div>
         <div className="form-control">
-          <label htmlFor="amount"
-            >Amount <br />
-            (negative - expense, positive - income)</label
-          >
-          <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Enter amount..." />
+         
+          <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Enter amount..." min='0' onkeydown={ (evt) => evt.key === 'e' && evt.preventDefault() }/>
         </div>
-        <button className="btn">Add transaction</button>
+        <button className="btn" onClick={income} >Income</button>
+        <button className="btn" onClick={expense} >Expense</button>
       </form>
     </>
   )
